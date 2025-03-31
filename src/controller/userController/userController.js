@@ -23,7 +23,7 @@ class userController {
     // }
     console.log("field", fields);
 
-    fields.userPassword = encrypt(fields.userPassword, process.env.KEY);
+    // fields.userPassword = encrypt(fields.userPassword, process.env.KEY);
     try {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
       fields.OTP = randomNumber;

@@ -12,8 +12,8 @@ class CreateSession {
     try {
       let user = await User.findOne({ userEmail: req.body.userEmail });
       if (
-        !user ||
-        decrypt(user.userPassword, process.env.KEY) != req.body.userPassword
+        !user 
+        // decrypt(user.userPassword, process.env.KEY) != req.body.userPassword
       ) {
         return res.status(403).json({ Message: "Invalide Credential" });
       }
