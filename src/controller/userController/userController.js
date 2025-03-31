@@ -15,12 +15,14 @@ class userController {
   // for the register user
   userSignUp = async (req, res) => {
     const fields = req.body;
-    if (!isValidPassword(fields.userPassword)) {
-      return res.status(400).json({
-        error:
-          "Password must have at least one letter (uppercase or lowercase), one digit, and one special symbol",
-      });
-    }
+    // if (!isValidPassword(fields.userPassword)) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Password must have at least one letter (uppercase or lowercase), one digit, and one special symbol",
+    //   });
+    // }
+    console.log("field", fields);
+
     fields.userPassword = encrypt(fields.userPassword, process.env.KEY);
     try {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
@@ -101,7 +103,17 @@ class userController {
     }
   };
 
-  deleteUser = async (req, res) => {};
+  deleteUser = async (req, res) => {
+     try {
+       const user = await User.findByIdAndDelete(req.params.id)
+       if (!user) {
+         return res.status(404).json({ error: "User not found" });
+       }
+       return res.status(200).json({ "Deleted User":user });
+     } catch (err) {
+       return res.status(500).json(err);
+     }
+  };
 
   updateUser = async (req, res) => {};
 

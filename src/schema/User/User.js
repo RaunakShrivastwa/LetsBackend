@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema(
     userPassword: { type: String, required: true },
     userRole: { type: String, default: "client" },
     pastProjects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
+    Blog: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
+    Articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
     currentProjects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
     profile: {
       type: String,

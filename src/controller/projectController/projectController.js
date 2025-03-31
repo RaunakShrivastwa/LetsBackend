@@ -64,7 +64,7 @@ class projectController {
     try {
       const project = await Project.findById(req.params.id);
       if (project) {
-        return res.status(200).json(project);
+        return res.status(200).json({project});
       }
       return res.status(401).json({
         MessageError: `User Does't exist with id ${req.params.id}`,

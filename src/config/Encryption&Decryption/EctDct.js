@@ -4,6 +4,7 @@ dotenv.config();
 
 class EncryptDecrypt {
   encrypt = (text, key) => {
+    
     const cipher = crypto.createCipher(process.env.ALGO, key);
     let encrypted = cipher.update(text, "utf8", "hex");
     encrypted += cipher.final("hex");

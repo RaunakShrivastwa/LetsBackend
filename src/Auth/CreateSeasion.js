@@ -11,7 +11,6 @@ class CreateSession {
   createToken = async (req, res) => {
     try {
       let user = await User.findOne({ userEmail: req.body.userEmail });
-      // req.locals = user;
       if (
         !user ||
         decrypt(user.userPassword, process.env.KEY) != req.body.userPassword
@@ -19,10 +18,18 @@ class CreateSession {
         return res.status(403).json({ Message: "Invalide Credential" });
       }
       if (!user.token) {
+        req.user = user;
         const token = JwtToken.sign(user.toJSON(), process.env.JWT_KEY, {
           expiresIn: 10000000,
         });
         await User.findByIdAndUpdate(user._id, { token });
+        res.cookie("token",token, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 60 * 1000,
+          sameSite: "Strict",
+        });
+
         return res.status(200).json({ token });
       }
       return res
@@ -35,9 +42,20 @@ class CreateSession {
 
   logout = async (req, res) => {
     try {
+      console.log(req.user);
+      
+       res.clearCookie("token", {
+         httpOnly: true,
+         secure: true,
+         sameSite: "Strict",
+       });
       return res.json(
         await User.findOneAndUpdate(
-          { token: req.header("Authorization") },
+          {
+            token:
+              req.headers.cookie?.replace("token=", "") ||
+              req.header("Authorization"),
+          },
           { token: null },
           { new: true }
         )

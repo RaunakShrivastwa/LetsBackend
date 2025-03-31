@@ -4,7 +4,9 @@ import User from "../schema/User/User.js";
 dotenv.config();
 
 const verifyToken = async (req, res, next) => {
-  const token = req.headers.authorization;
+  const token =
+    req.header("Authorization") || req.headers.cookie?.replace("token=", "");
+  
   if (!token) {
     return res
       .status(401)
